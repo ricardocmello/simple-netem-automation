@@ -9,7 +9,7 @@ if [[ $# -ne 2 ]]; then
     echo "Exiting the program"
     exit 2
     else
-        echo "We'll working with network interfaces "$1" "$2
+        echo "We'll work with network interfaces "$1" "$2
         echo ""
 fi
 sleep 1
@@ -58,7 +58,7 @@ if [ "$emulated_network" = "delay only" ]; then
     elif [ "$emulated_network" = "delay and loss" ]; then
         echo "$ sudo tc qdisc add dev $1 root netem delay $delay_avg_1'ms' $delay_std_1'ms' distribution $delay_dist_1 loss $loss_percentage_1'%'"
         echo "$ sudo tc qdisc add dev $2 root netem delay $delay_avg_2'ms' $delay_std_2'ms' distribution $delay_dist_2 loss $loss_percentage_2'%'"
-        sudo tc qdisc add dev $1 root netem delay $delay_av_1'ms' $delay_std_1'ms' distribution $delay_dist_1 loss $loss_percentage_1'%'
+        sudo tc qdisc add dev $1 root netem delay $delay_avg_1'ms' $delay_std_1'ms' distribution $delay_dist_1 loss $loss_percentage_1'%'
         sudo tc qdisc add dev $2 root netem delay $delay_avg_2'ms' $delay_std_2'ms' distribution $delay_dist_2 loss $loss_percentage_2'%'
     fi
 
