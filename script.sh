@@ -1,10 +1,17 @@
 #! /bin/bash
-
 clear
 echo "---------------------------------------"
 echo ""
 echo "Starting Network Emulation using 'tc' "
 echo ""
+if [[ $# -ne 2 ]]; then
+    echo "Error: please, specify two network interfaces to work with"
+    echo "Exiting the program"
+    exit 2
+    else
+        echo "We'll working with network interfaces "$1" "$2
+        echo ""
+fi
 sleep 1
 echo "Choose a config file"
 echo "1: test_delay.config"
@@ -39,14 +46,20 @@ echo "---------------------------------------"
 echo ""
 echo "Executing the following commands:"
 if [ "$emulated_network" = "delay only" ]; then
-    echo "$ sudo tc qdisc add dev $nic_name root netem delay $delay_avg'ms' $delay_stdms distribution $delay_dist"
-    sudo tc qdisc add dev $nic_name root netem delay $delay_avg'ms' $delay_std'ms' distribution $delay_dist
-     elif [ "$emulated_network" = "loss only" ]; then
-        echo "$ sudo tc qdisc change dev $nic_name root netem loss $loss_percentage%"
-        sudo tc qdisc add dev $nic_name root netem loss $loss_percentage'%'
+    echo "$ sudo tc qdisc add dev $1 root netem delay $delay_avg_1'ms' $delay_stdms_1 distribution $delay_dist_1"
+    echo "$ sudo tc qdisc add dev $2 root netem delay $delay_avg_2'ms' $delay_stdms_2 distribution $delay_dist_2"
+    sudo tc qdisc add dev $1 root netem delay $delay_avg_1'ms' $delay_std_1'ms' distribution $delay_dist_1
+    sudo tc qdisc add dev $2 root netem delay $delay_avg_2'ms' $delay_std_2'ms' distribution $delay_dist_2
+    elif [ "$emulated_network" = "loss only" ]; then
+        echo "$ sudo tc qdisc change dev $1 root netem loss $loss_percentage_1%"
+        echo "$ sudo tc qdisc change dev $2 root netem loss $loss_percentage_2%"
+        sudo tc qdisc add dev $1 root netem loss $loss_percentage_1'%'
+        sudo tc qdisc add dev $2 root netem loss $loss_percentage_2'%'
     elif [ "$emulated_network" = "delay and loss" ]; then
-        echo "$ sudo tc qdisc add dev $nic_name root netem delay $delay_avg'ms' $delay_std'ms' distribution $delay_dist loss $loss_percentage'%'"
-        sudo tc qdisc add dev $nic_name root netem delay $delay_avg'ms' $delay_std'ms' distribution $delay_dist loss $loss_percentage'%'
+        echo "$ sudo tc qdisc add dev $1 root netem delay $delay_avg_1'ms' $delay_std_1'ms' distribution $delay_dist_1 loss $loss_percentage_1'%'"
+        echo "$ sudo tc qdisc add dev $2 root netem delay $delay_avg_2'ms' $delay_std_2'ms' distribution $delay_dist_2 loss $loss_percentage_2'%'"
+        sudo tc qdisc add dev $1 root netem delay $delay_av_1'ms' $delay_std_1'ms' distribution $delay_dist_1 loss $loss_percentage_1'%'
+        sudo tc qdisc add dev $2 root netem delay $delay_avg_2'ms' $delay_std_2'ms' distribution $delay_dist_2 loss $loss_percentage_2'%'
     fi
 
 echo ""
@@ -56,7 +69,8 @@ echo "Press any key to exit program"
 read  -n 1 -p "" to_exit
 echo ""
 echo "Cleaning up any rules before exiting"
-sudo tc qdisc del dev $nic_name root
+sudo tc qdisc del dev $1 root
+sudo tc qdisc del dev $2 root
 echo ""
 echo "Exiting the program"
 exit 0
